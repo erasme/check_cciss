@@ -7,7 +7,7 @@ License: GPL
 Group: System/Monitoring
 Url: http://github.com/erasme/check_ccissc/
 
-Source: http://github.com/erasme/check_cciss/downloads/%name-%version.tar.gz
+Source: http://github.com/downloads/erasme/check_cciss/%name-%version.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
