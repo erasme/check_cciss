@@ -1,0 +1,15 @@
+#!/bin/bash
+
+rm *~
+cd ..
+
+VERSION=`grep Version check_cciss/check_cciss.spec | cut -f2 -d' '`
+
+cp -aRf check_cciss check_cciss-$VERSION
+tar czf check_cciss-$VERSION.tar.gz check_cciss-$VERSION
+mv check_cciss-$VERSION.tar.gz `rpm --eval %_sourcedir`
+rm -rf check_cciss-$VERSION
+
+cd -
+rpmbuild -ba check_cciss.spec
+

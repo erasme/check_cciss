@@ -1,0 +1,38 @@
+#!/bin/bash
+
+CONFIG_FILE=/etc/cciss/config
+REFERENCE_FILE=/etc/cciss/normal_state
+
+get_health() {
+	/usr/sbin/hpacucli ctrl all show status
+	/usr/sbin/hpacucli ctrl all show config
+}
+
+if [ "$1" == "-i" ]; then
+	if [ ! -d `dirname $REFERENCE_FILE` ]; then
+		mkdir `dirname $REFERENCE_FILE`
+	fi
+
+	$0 -d > $REFERENCE_FILE
+	exit
+fi
+
+if [ -s $CONFIG_FILE ]; then
+    . $CONFIG_FILE
+else
+    ALERT_EMAIL=root@localhost
+fi
+
+if [ "$1" == "-d" ]; then 
+	get_health
+	exit
+else
+	$0 -d > /tmp/result.$$ 
+
+	if ! diff $REFERENCE_FILE /tmp/result.$$ > /dev/null 2>&1; then
+		diff $REFERENCE_FILE /tmp/result.$$ | grep '^>' | tr  '>' ' ' | mail -s '[ERR] Disk failure on oracle.laclasse.com' $ALERT_EMAIL
+	fi
+
+	rm -f /tmp/result.$$
+fi
+

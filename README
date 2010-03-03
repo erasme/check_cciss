@@ -1,0 +1,9 @@
+check_cciss
+===========
+
+Checks if Smart Array has failed disks.
+
+Run first with -i (done automagically if installed as RPM)
+and periodically check by invoking script.
+
+Configure email recipient in /etc/cciss/config
