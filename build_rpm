@@ -11,5 +11,5 @@ mv check_cciss-$VERSION.tar.gz `rpm --eval %_sourcedir`
 rm -rf check_cciss-$VERSION
 
 cd -
-rpmbuild -ba check_cciss.spec
+rpmbuild -ba --sign check_cciss.spec
 
