@@ -1,5 +1,5 @@
 Name: check_cciss
-Version: 1.0
+Version: 1.1
 Release: 1.era
 
 Summary: check_cciss
