@@ -1,24 +1,26 @@
 #!/bin/bash
 
-VERSION="1.1"
+VERSION="1.2"
 CONFIG_FILE=/etc/cciss/config
 REFERENCE_FILE=/etc/cciss/normal_state
 HOSTNAME=`hostname`
 
 
 show_help() {
-		cat <<EOF 
+    cat <<EOF 
 
  check_cciss version $VERSION
  Tool to periodically check cciss arrays
 
- Usage : $0 [-h] [-i] [-d]
+ Usage : $0 [-h] [-i] [-d] [-n] [-v]
 
     -h : shows this help
     -i : initializes reference file ($REFERENCE_FILE)
     -d : display status
     -n : show difference, do not send email
     -v : show version
+
+Only one switch is allowed.
 
 When invoked without arguments, $0 will run hpacucli, check difference
  with reference file. If any difference is found, an email will be
@@ -29,22 +31,22 @@ EOF
 }
 
 get_health() {
-	/usr/sbin/hpacucli ctrl all show status
-	/usr/sbin/hpacucli ctrl all show config
+  /usr/sbin/hpacucli ctrl all show status
+  /usr/sbin/hpacucli ctrl all show config
 }
 
 if [ "$1" == "-v" ]; then
-	echo $VERSION;
-	exit
+  echo $VERSION;
+  exit
 fi
 
 if [ "$1" == "-i" ]; then
-	if [ ! -d `dirname $REFERENCE_FILE` ]; then
-		mkdir `dirname $REFERENCE_FILE`
-	fi
+  if [ ! -d `dirname $REFERENCE_FILE` ]; then
+    mkdir `dirname $REFERENCE_FILE`
+  fi
 
-	$0 -d > $REFERENCE_FILE
-	exit
+  $0 -d > $REFERENCE_FILE
+  exit
 fi
 
 if [ -s $CONFIG_FILE ]; then
@@ -54,24 +56,24 @@ else
 fi
 
 if [ "$1" == "-h" ]; then
-		show_help
-		exit
+    show_help
+    exit
 fi
 
 if [ "$1" == "-d" ]; then 
-	get_health
-	exit
+  get_health
+  exit
 else
-	$0 -d > /tmp/result.$$ 
+  $0 -d > /tmp/result.$$ 
 
-	if ! diff $REFERENCE_FILE /tmp/result.$$ > /dev/null 2>&1; then
-		if [ "$1" == "-n" ]; then 
-			diff $REFERENCE_FILE /tmp/result.$$ | grep '^>' | tr  '>' ' ' 
-		else
-			diff $REFERENCE_FILE /tmp/result.$$ | grep '^>' | tr  '>' ' ' | mail -s "[ERR] Disk failure on $HOSTNAME" $ALERT_EMAIL
-		fi
-	fi
+  if ! diff $REFERENCE_FILE /tmp/result.$$ > /dev/null 2>&1; then
+    if [ "$1" == "-n" ]; then 
+      diff $REFERENCE_FILE /tmp/result.$$ | grep '^>' | tr  '>' ' ' 
+    else
+      diff $REFERENCE_FILE /tmp/result.$$ | grep '^>' | tr  '>' ' ' | mail -s "[ERR] Disk failure on $HOSTNAME" $ALERT_EMAIL
+    fi
+  fi
 
-	rm -f /tmp/result.$$
+  rm -f /tmp/result.$$
 fi
 

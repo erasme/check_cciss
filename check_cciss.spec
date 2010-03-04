@@ -1,6 +1,6 @@
 Name: check_cciss
-Version: 1.1
-Release: 2.era
+Version: 1.2
+Release: 1.era
 
 Summary: check_cciss
 License: GPL
