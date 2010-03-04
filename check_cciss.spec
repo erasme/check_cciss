@@ -31,7 +31,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_sbindir}
 install check_cciss $RPM_BUILD_ROOT%{_sbindir}/
 
 %post
-ln -s %{_sbindir}/check_cciss /etc/cron.hourly/check_cciss
+if [ ! -L /etc/cron.hourly/check_cciss ]; then ln -s %{_sbindir}/check_cciss /etc/cron.hourly/check_cciss; fi
 %{_sbindir}/check_cciss -i
 
 %postun
