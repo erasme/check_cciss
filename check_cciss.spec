@@ -1,6 +1,6 @@
 Name: check_cciss
 Version: 1.1
-Release: 1.era
+Release: 2.era
 
 Summary: check_cciss
 License: GPL
@@ -42,6 +42,9 @@ rm /etc/cron.hourly/check_cciss
 %doc README
 
 %changelog		   
+* Thu Mar 04 2010 Michel Blanc <mblanc@erasme.org> 1.1-2.era
+- Check symlink presence before trying to make one
+
 * Thu Feb 04 2010 Michel Blanc <mblanc@erasme.org> 1.0-1.era
 - First packaged for CentOS
 
